@@ -162,10 +162,16 @@ class rundeck::params {
     }
   ]
 
+  $framework_admin_password = if $framework_config['framework.server.password'] =~ Sensitive {
+    $framework_config['framework.server.password'].unwrap
+  } else {
+    $framework_config['framework.server.password']
+  }
+
   $auth_config = {
     'file' => {
       'admin_user'     => $framework_config['framework.server.username'],
-      'admin_password' => $framework_config['framework.server.password'],
+      'admin_password' => $framework_admin_password,
       'auth_users'     => {},
       'file'           => '/etc/rundeck/realm.properties',
     },
