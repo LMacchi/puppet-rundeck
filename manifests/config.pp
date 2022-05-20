@@ -10,19 +10,19 @@ class rundeck::config {
   assert_private()
 
   # Allow Sensitive values
-  $key_password = if $rundeck::key_password =~ Sensitive {
+  $sensitive_key_password = if $rundeck::key_password =~ Sensitive {
     $rundeck::key_password.unwrap
   } else {
     $rundeck::key_password
   }
 
-  $keystore_password = if $rundeck::keystore_password =~ Sensitive {
+  $sensitive_keystore_password = if $rundeck::keystore_password =~ Sensitive {
     $keystore_password.unwrap
   } else {
     $rundeck::keystore_password
   }
 
-  $truststore_password = if $rundeck::truststore_password =~ Sensitive {
+  $sensitive_truststore_password = if $rundeck::truststore_password =~ Sensitive {
     $truststore_password.unwrap
   } else {
     $truststore_password
@@ -52,10 +52,10 @@ class rundeck::config {
   $java_home                          = $rundeck::java_home
   $jvm_args                           = $rundeck::jvm_args
   $kerberos_realms                    = $rundeck::kerberos_realms
-  $key_password                       = $key_password
+  $key_password                       = $sensitive_key_password
   $key_storage_type                   = $rundeck::key_storage_type
   $keystore                           = $rundeck::keystore
-  $keystore_password                  = $keystore_password
+  $keystore_password                  = $sensitive_keystore_password
   $log_properties_template            = $rundeck::log_properties_template
   $mail_config                        = $rundeck::mail_config
   $manage_default_admin_policy        = $rundeck::manage_default_admin_policy
@@ -89,7 +89,7 @@ class rundeck::config {
   $ssl_certfile                       = $rundeck::ssl_certfile
   $storage_encrypt_config             = $rundeck::storage_encrypt_config
   $truststore                         = $rundeck::truststore
-  $truststore_password                = $truststore_password
+  $truststore_password                = $sensitive_truststore_password
   $user                               = $rundeck::user
   $security_roles_array_enabled       = $rundeck::security_roles_array_enabled
   $security_roles_array               = $rundeck::security_roles_array
