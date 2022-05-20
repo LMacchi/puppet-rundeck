@@ -48,7 +48,7 @@ class rundeck::config::global::rundeck_config {
   # This file contains secret, omit the diff
   file { $properties_file:
     ensure    => file,
-    content   => template($rdeck_config_template),
+    content   => epp($rdeck_config_template),
     owner     => $user,
     group     => $group,
     mode      => '0640',

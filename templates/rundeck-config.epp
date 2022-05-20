@@ -1,0 +1,101 @@
+loglevel.default = "<%= $rundeck::config::global::framework::rd_loglevel %>"
+rdeck.base = "<%= $rundeck::config::global::framework::rdeck_base %>"
+rss.enabled = "<%= $rundeck::config::global::framework::rss_enabled %>"
+rundeck.log4j.config.file = "<%= $rundeck::config::global::framework::properties_dir %>/log4j.properties"
+
+<%- if has_key($rundeck::config::global::framework::security_config, 'useHMacRequestTokens') { -%>
+rundeck.security.useHMacRequestTokens = <%= $rundeck::config::global::framework::security_config['useHMacRequestTokens'] %>
+<%- } -%>
+<%- if has_key($rundeck::config::global::framework::security_config, 'apiCookieAccess') { -%>
+rundeck.security.apiCookieAccess.enabled = <%= $rundeck::config::global::framework::security_config['apiCookieAccess'] %>
+<%- } -%>
+<%- if has_key($rundeck::config::global::framework::security_config, 'apiTokensDuration') { -%>
+rundeck.api.tokens.duration.max = "<%= $rundeck::config::global::framework::security_config['apiTokensDuration'] %>"
+<%- } -%>
+<%- if has_key($rundeck::config::global::framework::security_config, 'csrfRefererFilterMethod') { -%>
+rundeck.security.csrf.referer.filterMethod = <%= $rundeck::config::global::framework::security_config['csrfRefererFilterMethod'] %>
+<%- } -%>
+<%- if has_key($rundeck::config::global::framework::security_config, 'csrfRefererAllowApi') { -%>
+rundeck.security.csrf.referer.allowApi = <%= $rundeck::config::global::framework::security_config['csrfRefererAllowApi'] %>
+<%- } -%>
+<%- if has_key($rundeck::config::global::framework::security_config, 'csrfRefererRequireHttps') { -%>
+rundeck.security.csrf.referer.requireHttps = <%= $rundeck::config::global::framework::security_config['csrfRefererRequireHttps'] %>
+<%- } -%>
+
+dataSource {
+  dbCreate = "<%= $rundeck::config::global::framework::database_config['dbCreate'] %>"
+  url = "<%= $rundeck::config::global::framework::database_config['url'] %>"
+  <%- if $rundeck::config::global::framework::database_config['type'] != 'h2' { -%>
+  driverClassName = "<%= $rundeck::config::global::framework::database_config['driverClassName'] %>"
+  username = "<%= $rundeck::config::global::framework::database_config['username'] %>"
+  password = "<%= $rundeck::config::global::framework::database_config['password'] %>"
+  dialect = "<%= $rundeck::config::global::framework::database_config['dialect'] %>"
+  <%- } -%>
+}
+
+<%- if ! empty($rundeck::config::global::framework::mail_config) and keys($rundeck::config::global::framework::mail_config) != ['defaults.from'] { %>
+grails {
+  mail {
+<%-   if $rundeck::config::global::framework::mail_config['host'] { -%>
+    host = "<%= $rundeck::config::global::framework::mail_config['host'] %>"
+<%-   } -%>
+<%-   if $rundeck::config::global::framework::mail_config['username'] { -%>
+    username = "<%= $rundeck::config::global::framework::mail_config['username'] %>"
+<%-   } -%>
+<%-   if $rundeck::config::global::framework::mail_config['port'] { -%>
+    port = <%= $rundeck::config::global::framework::mail_config['port'] %>
+<%-   } -%>
+<%-   if $rundeck::config::global::framework::mail_config['password'] { -%>
+    password = "<%= $rundeck::config::global::framework::mail_config['password'] %>"
+<%-   } -%>
+<%-   if $rundeck::config::global::framework::mail_config['props'] { -%>
+    props = [<% $rundeck::config::global::framework::mail_config['props'].each |$k, $v| { -%>"<%= $k %>":"<%= $v %>",<% } %>]
+<%-   } -%>
+  }
+}
+<%- } -%>
+<%- if $rundeck::config::global::framework::mail_config['defaults.from'] { -%>
+grails.mail.default.from = "<%= $rundeck::config::global::framework::mail_config['defaults.from'] %>"
+<%- } -%>
+grails.serverURL = "<%= $rundeck::config::global::framework::grails_server_url %>"
+rundeck.clusterMode.enabled = "<%= $rundeck::config::global::framework::clustermode_enabled %>"
+<%- if $rundeck::config::global::framework::execution_mode { -%>
+rundeck.executionMode = "<%= $rundeck::config::global::framework::execution_mode %>"
+<%- } -%>
+
+rundeck.projectsStorageType = "<%= $rundeck::config::global::framework::projects_storage_type %>"
+quartz.threadPool.threadCount = "<%= $rundeck::config::global::framework::quartz_job_threadcount %>"
+
+<%- if $rundeck::config::global::framework::key_storage_type == 'file' { -%>
+rundeck.storage.provider."1".type = "file"
+rundeck.storage.provider."1".config.baseDir = "<%= $rundeck::config::global::framework::file_keystorage_dir %>"
+<%- } elsif $rundeck::config::global::framework::key_storage_type == 'vault' { -%>
+rundeck.storage.provider."1".type = "vault-storage"
+rundeck.storage.provider."1".path = "keys"
+rundeck.storage.provider."1".config.prefix = "<%= $rundeck::config::global::framework::vault_keystorage_prefix %>"
+rundeck.storage.provider."1".config.address = "<%= $rundeck::config::global::framework::vault_keystorage_url %>"
+rundeck.storage.provider."1".config.storageBehaviour = "rundeck"
+rundeck.storage.provider."1".config.secretBackend = "kv"
+rundeck.storage.provider."1".config.approleId = "<%= $rundeck::config::global::framework::vault_keystorage_approle_approleid %>"
+rundeck.storage.provider."1".config.approleSecretId = "<%= $rundeck::config::global::framework::vault_keystorage_approle_secretid %>"
+rundeck.storage.provider."1".config.approleAuthMount = "<%= $rundeck::config::global::framework::vault_keystorage_approle_authmount %>"
+rundeck.storage.provider."1".config.authBackend = "<%= $rundeck::config::global::framework::vault_keystorage_authbackend %>"
+rundeck.storage.provider."1".removePathPrefix = true
+<%- } else { -%>
+rundeck.storage.provider."1".type = "db"
+<%- } -%>
+rundeck.storage.provider."1".path = "/"
+<%- if ! $rundeck::config::global::framework::storage_encrypt_config.empty { -%>
+
+<%-   $rundeck::config::global::framework::storage_encrypt_config.each |$k, $v| { -%>
+rundeck.storage.converter."1".<%= $k %> = "<%= $v %>"
+<%-   } -%>
+<%- } -%>
+
+<%- $rundeck::config::global::framework::preauthenticated_config.each |$k, $v| { -%>
+rundeck.security.authorization.preauthenticated.<%= $k %> = "<%= $v %>"
+<%- } -%>
+
+<%- $rundeck::config::global::framework::gui_config.each |$k, $v| { -%>
+<%= $k %> = "<%= $v %>"
+<%- } -%>
