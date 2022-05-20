@@ -40,7 +40,7 @@ class rundeck::config::global::framework {
   # This file contains secrets, omit diff when making changes
   file { $properties_file:
     ensure    => file,
-    content   => template('rundeck/framework.properties.erb'),
+    content   => template('rundeck/framework.properties.epp'),
     owner     => $user,
     group     => $group,
     mode      => '0640',
