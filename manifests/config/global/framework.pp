@@ -37,12 +37,14 @@ class rundeck::config::global::framework {
 
   $framework_config = merge($_framework_config, $framework_config_url, $framework_config_port)
 
+  # This file contains secrets, omit diff when making changes
   file { $properties_file:
-    ensure  => file,
-    content => template('rundeck/framework.properties.erb'),
-    owner   => $user,
-    group   => $group,
-    mode    => '0640',
-    require => File[$properties_dir],
+    ensure    => file,
+    content   => template('rundeck/framework.properties.erb'),
+    owner     => $user,
+    group     => $group,
+    mode      => '0640',
+    show_diff => false,
+    require   => File[$properties_dir],
   }
 }

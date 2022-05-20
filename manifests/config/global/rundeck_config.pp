@@ -45,13 +45,15 @@ class rundeck::config::global::rundeck_config {
     ensure => absent,
   }
 
+  # This file contains secret, omit the diff
   file { $properties_file:
-    ensure  => file,
-    content => template($rdeck_config_template),
-    owner   => $user,
-    group   => $group,
-    mode    => '0640',
-    require => File[$properties_dir],
-    notify  => Service[$rundeck::params::service_name],
+    ensure    => file,
+    content   => template($rdeck_config_template),
+    owner     => $user,
+    group     => $group,
+    mode      => '0640',
+    show_diff => false,
+    require   => File[$properties_dir],
+    notify    => Service[$rundeck::params::service_name],
   }
 }
