@@ -163,8 +163,10 @@ class rundeck::params {
   ]
 
   $framework_admin_password = if $framework_config['framework.server.password'] =~ Sensitive {
+    notify { 'Framework server password is Sensitive, unwrapping': }
     $framework_config['framework.server.password'].unwrap
   } else {
+    notify { 'Framework server password is NOT Sensitive': }
     $framework_config['framework.server.password']
   }
 
