@@ -304,6 +304,7 @@ class rundeck::params {
 
   $ssl_enabled = false
   $ssl_port = 4443
+  $port_forward = false
 
   $ssl_keyfile = '/etc/rundeck/ssl/rundeck.key'
   $ssl_certfile = '/etc/rundeck/ssl/rundeck.crt'

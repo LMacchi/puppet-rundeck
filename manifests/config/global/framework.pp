@@ -8,6 +8,7 @@
 #
 class rundeck::config::global::framework {
   $group          = $rundeck::config::group
+  $port_forward   = $rundeck::config::port_forward
   $properties_dir = $rundeck::config::properties_dir
   $user           = $rundeck::config::user
   $ssl_enabled    = $rundeck::config::ssl_enabled
@@ -22,7 +23,11 @@ class rundeck::config::global::framework {
 
   if $ssl_enabled {
     $framework_config_port = { 'framework.server.port' => $ssl_port }
-    $framework_config_url = { 'framework.server.url' => "https://${rundeck_hostname}:${ssl_port}" }
+    if $port_forward {
+      $framework_config_url = { 'framework.server.url' => "https://${rundeck_hostname}" }
+    } else {
+      $framework_config_url = { 'framework.server.url' => "https://${rundeck_hostname}:${ssl_port}" }
+    }
   } elsif $rundeck_hostname != $rundeck::params::framework_config['framework.server.hostname'] {
     $framework_config_port = undef
     $framework_config_url = { 'framework.server.url' => "http://${rundeck_hostname}:${rundeck_port}" }

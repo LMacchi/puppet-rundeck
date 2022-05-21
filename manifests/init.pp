@@ -178,6 +178,9 @@
 # [*ssl_port*]
 #  ssl port of the rundeck web application (default to '4443').
 #
+# [*port_forward*]
+#  When SSL is enabled, this flag omits the port in the framework URL to allow port forwarding from outside the application
+#
 # [*truststore*]
 #  The full path to the java truststore to be used by Rundeck.
 #
@@ -288,6 +291,7 @@ class rundeck (
   Integer $session_timeout                                      = $rundeck::params::session_timeout,
   Boolean $ssl_enabled                                          = $rundeck::params::ssl_enabled,
   Stdlib::Port $ssl_port                                        = $rundeck::params::ssl_port,
+  Boolean $port_forward                                         = $rundeck::params::port_forward,
   Stdlib::Absolutepath $truststore                              = $rundeck::params::truststore,
   String $truststore_password                                   = $rundeck::params::truststore_password,
   String $user                                                  = $rundeck::params::user,

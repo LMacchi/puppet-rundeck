@@ -44,6 +44,7 @@ class rundeck::config {
   $overrides_dir                      = $rundeck::overrides_dir
   $package_ensure                     = $rundeck::package_ensure
   $preauthenticated_config            = $rundeck::preauthenticated_config
+  $port_forward                       = $rundeck::port_forward
   $projects                           = $rundeck::projects
   $projects_description               = $rundeck::projects_description
   $projects_organization              = $rundeck::projects_organization
