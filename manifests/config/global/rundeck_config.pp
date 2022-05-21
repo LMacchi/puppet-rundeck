@@ -45,10 +45,17 @@ class rundeck::config::global::rundeck_config {
     ensure => absent,
   }
 
+  # Continue allowing ERB templates for backwards compatibility
+  if $rdeck_config_template =~ /\.epp$/ {
+    $content = epp($rdeck_config_template)
+  } else {
+    $content = template($rdeck_config_template)
+  }
+
   # This file contains secret, omit the diff
   file { $properties_file:
     ensure    => file,
-    content   => epp($rdeck_config_template),
+    content   => $content,
     owner     => $user,
     group     => $group,
     mode      => '0640',
