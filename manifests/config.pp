@@ -85,10 +85,6 @@ class rundeck::config {
   $framework_config = deep_merge($rundeck::params::framework_config, $rundeck::framework_config)
   $auth_config      = deep_merge($rundeck::params::auth_config, $rundeck::auth_config)
 
-  notify { "rundeck::params::auth_config is ${rundeck::params::auth_config}": }
-  notify { "rundeck::auth_config is ${rundeck::auth_config}": }
-  notify { "auth_config is ${auth_config}": }
-
   $logs_dir       = $framework_config['framework.logs.dir']
   $rdeck_base     = $framework_config['rdeck.base']
   $projects_dir   = $framework_config['framework.projects.dir']
