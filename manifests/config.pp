@@ -123,10 +123,19 @@ class rundeck::config {
     $_deploy_realm = false
   }
 
+  # Continue allowing ERB templates for backwards compatibility
+  if $realm_template =~ /\.epp$/ {
+    $content = epp($realm_template)
+  } else {
+    $content = template($realm_template)
+  }
+
   if $_deploy_realm {
+    # This file contains secrets, omit the diff
     file { "${properties_dir}/realm.properties":
-      content => template($realm_template),
-      require => File[$properties_dir],
+      content   => $content,
+      show_diff => false,
+      require   => File[$properties_dir],
     }
   }
 
